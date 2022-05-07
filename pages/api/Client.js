@@ -20,17 +20,12 @@ import {Form,
         Popconfirm } from 'antd';
 
 const array=[]
+
 const App = () => {
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    message.error('Canceled');
-  };
-
-  const { Header, Content,  Sider  } = Layout;
-  const [contacts, setContacts] = useState(array)
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const { Header, Content,  Sider  } = Layout;
+    const [contacts, setContacts] = useState(array)
     const [clientName, setclientName] = useState('')
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
@@ -53,11 +48,18 @@ const App = () => {
         setUsers(data);
       });
   };
+        
   useEffect(() => {
     fetchData();
   }, []);
 
+  
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    message.error('Canceled');
+  };
 
+        
   const handleClick=(e) =>{
     e.preventDefault()
     const data = {
