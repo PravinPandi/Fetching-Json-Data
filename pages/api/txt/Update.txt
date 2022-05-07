@@ -1,0 +1,108 @@
+import React, {useState } from "react";
+import 'antd/dist/antd.css'
+import axios from 'axios'
+import {Form,
+        Input,
+        Button,
+        Card,
+        Row,
+        Divider,
+        message,
+        Select,
+        Layout,
+        Popconfirm } from 'antd';
+
+const array=[]
+const Update = () => {
+
+  const { Header, Content,  Sider  } = Layout;
+    const [clientName, setclientName] = useState('')
+    const [city, setCity] = useState('')
+    const [state, setState] = useState('')
+    const [website, setWebsite] = useState('')
+    const [phone, setPhone] = useState('')
+    const [emailAddress, setEmailAddress] = useState('')
+    const [imageUrl,setImageUrl]=useState()
+
+
+
+  const updateUser = async clientName => {
+    await axios.put(`http://54.90.113.221:8888/adventurus/admin/modifyclient?city=${city}&clientName=${clientName}&emailAddress=${emailAddress}&imageUrl=${imageUrl}hone=${phone}&state=${state}&website=${website}`);
+  fetchData()
+  };
+const {Option}=Select;
+
+  return (
+<div>
+    <Header style={{ backgroundColor:'#F6F6F6'}}>
+        <div>
+        <b style={{fontSize:25}} >New Client</b>
+        </div>
+    </Header>
+    <Layout style={{ backgroundColor:'#EEECED'}}>
+    <Content
+      className="bg"
+      style={{
+        padding: 56,
+        height:600,
+        marginLeft:200,
+        backgroundColor:'#EEECED',
+      }}
+    >
+         <div >
+        <Card style={{width:200,height:200,borderRadius:10,marginLeft:-200,marginTop:50}}>
+          </Card>
+          </div>
+           <div style={{marginTop:-235,marginLeft:35}} >
+           <Divider orientation='left' orientationMargin="0" ><p style={{opacity:0.4}}>Client Details</p></Divider>
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-7 xs:gap-y-10 mt-6"></div></div>
+        <Form onSubmit={handleClick}>
+      <Row>
+        <Input label="Client Name *" value={clientName} placeholder='Client Name'  style={{width:250,height:30,marginLeft:35}} type="text" required   onChange={(e)=>setclientName(e.target.value)} />
+      <Form.Item label=""  style={{width:250,height:30,marginLeft:35}}>
+         <Select
+           placeholder="city"
+          value={city}
+          onChange={(e)=> {
+           setCity(e)
+          }}
+        >
+          <Option value="Chennai">Chennai</Option>
+          <Option value="Salem">Salem</Option>
+        </Select>
+        </Form.Item>
+         <Form.Item label=""  style={{width:250,height:30,marginLeft:35}}>
+        <Select
+          placeholder="state"
+          value={state}
+          onChange={(e)=> {
+           setState(e)
+          }}
+        >
+          <Option value="TamilNadu">TamilNadu</Option>
+        </Select>
+        </Form.Item>
+        </Row><br/>
+        <Row>
+        <Input label="Website *"  style={{width:250,height:30,marginLeft:35}} type="text" placeholder='website'  required   onChange={(e)=>setWebsite(e.target.value)} />
+        <Input label="Contact *"  style={{width:250,height:30,marginLeft:35}} type="number" required  placeholder='Contact' onChange={(e)=>setPhone(e.target.value)} />
+        <Input label="Mail id *"  style={{width:250,height:30,marginLeft:35}} type="text" required   placeholder='Email'  onChange={(e)=>setEmailAddress(e.target.value)} />
+        </Row><br/>
+        <div style={{marginLeft:35}}>
+        <Divider orientation='left' orientationMargin="0" ><p style={{opacity:0.4}}>Login Details</p></Divider>
+        </div>
+        <Row>
+        <Input label="UserName *"  style={{width:250,height:30,marginLeft:35}} type="text" required   placeholder='UserName' onChange={(e)=>setUserName(e.target.value)} />
+        <Input label="Password *"  style={{width:250,height:30,marginLeft:35}} type="password" required   placeholder='Password' onChange={(e)=>setPassword(e.target.value)} />
+        <Input label="Confirm Password *"  style={{width:250,height:30,marginLeft:35}} type="password" required   placeholder='Confirm Password'   onChange={(e)=>setConfirmPass(e.target.value)} />
+        </Row><br/><br/>
+      <Form.Item  style={{width:200}}>
+      <Button  type="submit" variant="contained" style={{marginLeft:390}}onClick={handleClick}>submit</Button>
+      </Form.Item>
+    </Form>
+    </Content>
+    </Layout>
+    </div>
+  );
+};
+export default Update;

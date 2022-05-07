@@ -1,0 +1,157 @@
+import React, { useEffect, useState } from 'react'
+import 'antd/dist/antd.css';
+import { Form, Input, Button,  Select, Card,Row,Divider,message,Popconfirm, Alert } from 'antd';
+import { Layout } from 'antd';
+function Ap() {
+  const [users, setUsers] = useState([])
+  const [clientName, setclientName] = useState('')
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [website, setWebsite] = useState('')
+  const [phone, setPhone] = useState('')
+  const [emailAddress, setEmailAddress] = useState('')
+  const [imageUrl,setImageUrl]=useState()
+  const [password, setPassword] = useState('')
+  const [userName, setUserName] = useState('')
+  const [userId,setUserId]=useState(null)
+  const fetchData = () => {
+    fetch("http://54.90.113.221:8888/adventurus/admin/listclients")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setUsers(data);
+      });
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  function deleteUser(clientName) {
+    fetch(`http://54.90.113.221:8888/adventurus/admin/deleteclient?clientName=${clientName}`, {
+      method: 'DELETE'
+    }).then((result) => {
+      result.json().then((resp) => {
+        console.warn(resp)
+        fetchData()
+      })
+    })
+  }
+
+  function selectUser(id)
+  {
+    let item=users[id-1];
+        setclientName(item.clientName)
+        setEmailAddress(item.emailAddress)
+        setPhone(item.phone);
+        setWebsite(item.website)
+        setCity(item.city)
+        setState(item.state)
+        setImageUrl(item.imageUrl)
+  }
+  
+  const updateUser =async() => {
+    return await fetch(`http://54.90.113.221:8888/adventurus/admin/modifyclient?city=${city}&clientName=${clientName}&emailAddress=${emailAddress}&imageUrl=${imageUrl}&phone=${phone}&state=${state}&website=${website}`, {
+      method: "PUT",
+      headers: {
+        accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.json());
+  };
+  // function updateUser(clientName)
+  // {
+  //   let item={clientName,emailAddress,phone,website,city,state,imageUrl}
+  //   console.warn("item",item)
+  //   fetch(`http://54.90.113.221:8888/adventurus/admin/modifyclient?city=${city}&clientName=${clientName}&emailAddress=${emailAddress}&imageUrl=${imageUrl}&phone=${phone}&state=${state}&website=${website}`, {
+  //     method: 'PUT',
+  //     headers:{
+  //       'Accept':'application/json',
+  //       'Content-Type':'application/json'
+  //     },
+  //     body:JSON.stringify(item)
+  //   }).then((result) => {
+  //     result.json().then((resp) => {
+  //       console.warn(resp)
+  //       fetchData()
+  //     })
+  //   })
+  // }
+  const {Option}=Select;
+  return (
+    <div className="App">
+      <h1>Update User Data With API </h1>
+      <table border="1" style={{ float: 'left' }}>
+        <tbody>
+          <tr>
+            <td>ID</td>
+            <td>Name</td>
+            <td>Email</td>
+            <td>Mobile</td>
+            <td>Operations</td>
+            <td>website</td>
+          </tr>
+          {
+            users.map((item, i) =>
+              <tr key={i}>
+                <td>{i+1}</td>
+                <td>{item.clientName}</td>
+                <td>{item.city}</td>
+                <td>{item.state}</td>
+                <td>{item.phone}</td>
+                <td>{item.website}</td>
+                <td><button onClick={() => deleteUser(item.clientName)}>Delete</button></td>
+                <td><button onClick={() => selectUser(item.clientName)}>Update</button></td>
+              </tr>
+            )
+          }
+        </tbody>
+      </table>
+      <div>
+      <Form className="flex flex-wrap md:flex-nowrap mt-14 gap-x-14 mb-14">
+      <Row>
+        <Input label="Client Name *" value={clientName} style={{width:200,height:30,marginLeft:30}} type="text" required placeholder='cleintname'  onChange={(e)=>setclientName(e.target.value)} />
+      <Form.Item label="" style={{width:200,height:30,marginLeft:30}}>
+         <Select
+          placeholder="chennai"
+          value={city}
+          onChange={(e)=> {
+           setCity(e)
+          }}
+        >
+          <Option value="madurai">madurai</Option>
+          <Option value="Virudhunagar">Virudhunagar</Option>
+        </Select>
+        </Form.Item>
+         <Form.Item label=""  style={{width:200,height:30,marginLeft:30}}>
+        <Select
+          placeholder="State"
+          value={state}
+          onChange={(e)=> {
+           setState(e)
+          }}
+        >
+          <Option value="TamilNadu">TamilNadu</Option>
+        </Select>
+        </Form.Item>
+        </Row><br/>
+        <Row>
+        <Input label="Website *"  style={{width:200,height:30,marginLeft:30}} placeholder='Website' type="text" required value={website}  onChange={(e)=>setWebsite(e.target.value)} />
+        <Input label="Contact *"  style={{width:200,height:30,marginLeft:30}}  type="text" placeholder='mail' required  value={emailAddress} onChange={(e)=>setEmailAddress(e.target.value)} />
+        <Input label="Mail id *"  style={{width:200,height:30,marginLeft:30}} type="text" placeholder='phone' required  value={phone} onChange={(e)=>setPhone(e.target.value)} />
+        </Row><br/>
+        <Divider orientation='left' orientationMargin="0" className='!text-[13px] font-semibold !text-gray-400 !mt-12'>Login Details</Divider><br/>
+        <Row>
+        <Input label="username *"  style={{width:200,height:30,marginLeft:30}} type="text" required value={userName} placeholder='username'
+        onChange={(e)=>setUserName(e.target.value)}
+        />
+        <Input label=" password *"  style={{width:200,height:30,marginLeft:30}} type="" required value={password}  placeholder='password' onChange={(e)=>setPassword(e.target.value)} />
+        <Input label=" imageUrl *"  style={{width:200,height:30,marginLeft:30}} type="" required value={imageUrl}  onChange={(e)=>setImageUrl(e.target.value)} />
+        </Row><br/><br/>
+        <Button onClick={updateUser} >Update User</Button>
+        </Form>
+      </div>
+    </div>
+  );
+}
+export default Ap;
