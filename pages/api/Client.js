@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import 'antd/dist/antd.css'
 import { addClient } from './addClient';
-
-import axios from 'axios'
-import Link from 'next/link';
 import {Table,
         TableBody,
         TableCell,
@@ -21,20 +18,11 @@ import {Form,
         Select,
         Layout,
         Popconfirm } from 'antd';
-import { width } from "@mui/system";
 
 const array=[]
 const App = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
 
   const handleCancel = () => {
     setIsModalVisible(false);
